@@ -1,0 +1,84 @@
+digraph terraform_azure_architecture {
+    // Graph settings
+    graph [
+        rankdir=TB,
+        bgcolor="white",
+        fontname="Arial",
+        fontsize=14,
+        labelloc="t",
+        label="Azure Terraform Infrastructure with vWAN"
+    ];
+
+    node [
+        shape=box,
+        style=filled,
+        fontname="Arial",
+        fontsize=12
+    ];
+
+    edge [
+        fontname="Arial",
+        fontsize=10
+    ];
+
+    // Define node styles by category
+    subgraph cluster_networking {
+        label="Networking Layer";
+        style=filled;
+        color=lightblue;
+
+        vwan [label="Azure vWAN\n(Global Transit)", fillcolor=lightcyan];
+        networking [label="Virtual Network\n(Hub-Spoke)", fillcolor=lightcyan];
+        firewall [label="Azure Firewall\n(Security)", fillcolor=orange];
+    }
+
+    subgraph cluster_compute {
+        label="Compute Layer";
+        style=filled;
+        color=lightgreen;
+
+        compute [label="VM Scale Set\n(Auto-scaling)", fillcolor=lightgreen];
+        appgw [label="Application Gateway\n(Load Balancer)", fillcolor=lightgreen];
+    }
+
+    subgraph cluster_data {
+        label="Data Layer";
+        style=filled;
+        color=lightyellow;
+
+        database [label="PostgreSQL\n(Flexible Server)", fillcolor=lightyellow];
+        storage [label="Storage Account\n(Blob Storage)", fillcolor=lightyellow];
+    }
+
+    subgraph cluster_security {
+        label="Security & Monitoring";
+        style=filled;
+        color=lightcoral;
+
+        security [label="Key Vault\n(Secrets)", fillcolor=lightcoral];
+        monitoring [label="Log Analytics\n(Monitoring)", fillcolor=lightcoral];
+    }
+
+    // Dependencies and relationships
+    vwan -> networking [label="connects to"];
+    vwan -> firewall [label="routes through"];
+    networking -> compute [label="hosts"];
+    networking -> database [label="private endpoint"];
+    networking -> storage [label="private endpoint"];
+    compute -> appgw [label="backend for"];
+    security -> compute [label="provides secrets"];
+    security -> database [label="stores credentials"];
+    monitoring -> vwan [label="monitors"];
+    monitoring -> networking [label="logs"];
+    monitoring -> compute [label="metrics"];
+    monitoring -> database [label="diagnostics"];
+    firewall -> appgw [label="protects"];
+
+    // External connections
+    internet [label="Internet", shape=cloud, fillcolor=white];
+    onpremises [label="On-Premises\n(VPN/ExpressRoute)", shape=house, fillcolor=white];
+
+    internet -> appgw [label="HTTPS"];
+    internet -> firewall [label="filtered"];
+    onpremises -> vwan [label="site-to-site"];
+}

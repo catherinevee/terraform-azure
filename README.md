@@ -38,6 +38,19 @@ The repository includes a comprehensive GitHub Actions workflow (`terraform.yml`
 
 This Terraform configuration deploys a scalable, secure web application infrastructure on Azure with advanced networking capabilities using Azure Virtual WAN (vWAN). The infrastructure is designed for enterprise-grade deployments with high availability, security, and global connectivity.
 
+## Architecture Diagrams
+
+### High-Level Architecture
+![Terraform Modules Architecture](terraform-modules-architecture.png)
+
+### Terraform Dependency Graph
+![Terraform Architecture Diagram](terraform-architecture-diagram.png)
+
+*Additional diagrams available:*
+- [High-level SVG](terraform-modules-architecture.svg)
+- [Dependency graph SVG](terraform-architecture-diagram.svg)
+- [Development environment diagram](terraform-dev-architecture-diagram.png)
+
 ## Architecture Components
 
 ### Core Infrastructure
