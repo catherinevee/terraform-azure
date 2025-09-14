@@ -124,35 +124,55 @@ cd terraform-azure
 # 2. Authenticate with Azure
 az login
 
-# 3. Navigate to desired environment
-cd environments/dev  # or staging/prod
+# 3. Option A: Use Makefile (recommended)
+make init ENV=dev      # Initialize Terraform
+make plan ENV=dev      # Review changes
+make apply ENV=dev     # Deploy infrastructure
 
-# 4. Initialize and deploy
-terraform init
-terraform plan
-terraform apply
+# 3. Option B: Direct Terraform commands
+cd environments/dev    # Navigate to environment
+terraform init         # Initialize
+terraform plan         # Review changes
+terraform apply        # Deploy
 ```
+
+### Setup Scripts
+
+Automated setup scripts are available in the `scripts/` directory:
+- **Windows PowerShell**: `scripts/setup-pipeline.ps1`
+- **Windows Command Prompt**: `scripts/setup-pipeline.bat`
+- **Linux/macOS/Git Bash**: `scripts/setup-pipeline.sh`
+
+These scripts automate the creation of Azure resources and GitHub secrets needed for CI/CD.
 
 ## Directory Structure
 
 ```
 terraform-azure/
-├── environments/          # Environment-specific configurations
+├── .github/               # GitHub Actions workflows
+│   └── workflows/        # CI/CD pipeline definitions
+├── docs/                 # Documentation
+│   ├── diagrams/         # Architecture diagrams
+│   └── *.md              # Documentation files
+├── environments/         # Environment-specific configurations
 │   ├── dev/              # Development environment
 │   ├── staging/          # Staging environment
 │   └── prod/             # Production environment
 ├── modules/              # Reusable Terraform modules
-│   ├── vwan/            # Virtual WAN and connectivity
-│   ├── networking/      # Virtual network and subnets
-│   ├── compute/         # VM Scale Set and App Gateway
-│   ├── database/        # PostgreSQL database
-│   ├── security/        # Key Vault and security
-│   └── monitoring/      # Monitoring and alerts
-├── main.tf              # Root module configuration
-├── variables.tf         # Variable definitions
-├── outputs.tf           # Output definitions
-├── versions.tf          # Provider requirements
-└── README.md            # This file
+│   ├── vwan/             # Virtual WAN and connectivity
+│   ├── networking/       # Virtual network and subnets
+│   ├── compute/          # VM Scale Set and App Gateway
+│   ├── database/         # PostgreSQL database
+│   ├── security/         # Key Vault and security
+│   └── monitoring/       # Monitoring and alerts
+├── scripts/              # Automation scripts
+│   └── setup-pipeline.*  # Pipeline setup scripts
+├── main.tf               # Root module configuration
+├── variables.tf          # Variable definitions
+├── outputs.tf            # Output definitions
+├── versions.tf           # Provider requirements
+├── Makefile              # Common operations automation
+└── README.md             # This file
 ```
 
 ## Module Descriptions
@@ -305,19 +325,35 @@ express_route_circuits = {
 
 ## Maintenance
 
+### Using Makefile
+The repository includes a Makefile for common operations:
+
+```bash
+make help           # Show available commands
+make init ENV=dev   # Initialize environment
+make plan ENV=dev   # Plan changes
+make apply ENV=dev  # Apply changes
+make destroy ENV=dev # Destroy infrastructure
+make clean          # Clean temporary files
+make docs           # Generate documentation
+```
+
 ### Regular Tasks
 ```bash
 # Check for drift
-terraform plan
+make plan ENV=prod
 
 # Update providers
 terraform init -upgrade
 
 # Validate configuration
-terraform validate
+make validate ENV=prod
 
 # Format code
 terraform fmt -recursive
+
+# Clean up temporary files
+make clean
 ```
 
 ### Backup Verification
@@ -422,9 +458,14 @@ For issues or questions:
 4. Push to the branch
 5. Create a Pull Request
 
-## Changelog
+## Documentation
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+Additional documentation is available in the `docs/` directory:
+- [Documentation Index](docs/README.md) - Complete documentation overview
+- [CI/CD Setup Guide](docs/SETUP_CICD.md) - Detailed CI/CD configuration
+- [Pipeline Setup Summary](docs/PIPELINE_SETUP_SUMMARY.md) - Current pipeline status
+- [Architecture Diagrams](docs/diagrams/) - Visual architecture representations
+- [Terraform Docs](docs/terraform-docs.md) - Auto-generated module documentation
 
 ---
 
