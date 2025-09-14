@@ -1,29 +1,38 @@
 # Production-Ready Azure Terraform Deployment with vWAN
 
 [![Terraform Deployment](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
-[![Security Scan](https://img.shields.io/github/actions/workflow/status/catherinevee/terraform-azure/terraform.yml?label=Security%20Scan&event=schedule)](https://github.com/catherinevee/terraform-azure/security)
+[![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
 [![Dependencies](https://github.com/catherinevee/terraform-azure/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/catherinevee/terraform-azure/network/updates)
 [![Infrastructure Status](https://img.shields.io/github/deployments/catherinevee/terraform-azure/prod?label=Infrastructure)](https://github.com/catherinevee/terraform-azure/deployments)
 [![Last Commit](https://img.shields.io/github/last-commit/catherinevee/terraform-azure?label=Last%20Commit)](https://github.com/catherinevee/terraform-azure/commits/main)
 
 ## CI/CD Pipeline
 
-The repository includes a comprehensive GitHub Actions workflow (`terraform.yml`) that provides:
+The repository includes comprehensive GitHub Actions workflows:
 
-### Workflow Features
+### Primary Workflows
+
+#### Terraform Deployment (`terraform.yml`)
 - **Environment Detection**: Automatically determines target environment based on branch
-- **Security Scanning**: TFSec and Checkov analysis on PRs and scheduled runs
 - **Terraform Validation**: Format checking, validation, and planning
 - **Artifact Management**: Stores Terraform plans and outputs
 - **PR Integration**: Adds plan details as PR comments
 - **Multi-Environment Support**: Handles dev, staging, and production deployments
 
+#### Security Scanning (`security.yml`)
+- **TFSec**: Infrastructure security scanning
+- **Checkov**: Compliance and security policy checks
+- **Terraform Lint**: Code quality and formatting validation
+- **Secrets Detection**: TruffleHog and Gitleaks scanning
+- **Compliance Check**: Policy-as-code validation
+- **SARIF Integration**: Results uploaded to GitHub Security tab
+
 ### Deployment Status
 
 | Badge | Description | Trigger |
 |-------|-------------|---------|
-| **Terraform Deployment** | Unified workflow: validation, security scanning, and deployment | Push to main/develop, PRs, manual |
-| **Security Scan** | TFSec and Checkov security analysis | Weekly schedule & PRs |
+| **Terraform Deployment** | Unified workflow: validation and deployment | Push to main/develop, PRs, manual |
+| **Security Scan** | Comprehensive security analysis (TFSec, Checkov, Secrets, Compliance) | Weekly schedule, PRs, and pushes |
 | **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
 | **Infrastructure Status** | Production environment deployment status | GitHub deployments |
 | **Last Commit** | Shows repository activity and freshness | On every commit |

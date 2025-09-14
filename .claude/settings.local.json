@@ -20,7 +20,8 @@
       "Bash(rover:*)",
       "Bash(scoop search:*)",
       "Bash(terraform:*)",
-      "Bash(dot:*)"
+      "Bash(dot:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

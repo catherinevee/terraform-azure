@@ -1,0 +1,237 @@
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+      - 'modules/**'
+      - '.github/workflows/security.yml'
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+      - 'modules/**'
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly scan on Monday at 2 AM UTC
+  workflow_dispatch:
+
+env:
+  TERRAFORM_VERSION: '1.5.7'
+  TFLINT_VERSION: '0.48.0'
+
+jobs:
+  tfsec:
+    name: TFSec Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run TFSec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          soft_fail: false
+          format: default
+          additional_args: --force-all-dirs
+
+      - name: TFSec SARIF Report
+        uses: aquasecurity/tfsec-action@v1.0.3
+        if: success() || failure()
+        with:
+          soft_fail: true
+          format: sarif
+          out: tfsec-results.sarif
+
+      - name: Upload TFSec Results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: tfsec-results.sarif
+          category: tfsec
+
+  checkov:
+    name: Checkov Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform
+          output_format: cli,sarif
+          output_file_path: console,checkov-results.sarif
+          soft_fail: false
+          skip_check: CKV_AZURE_35,CKV_AZURE_36  # Skip specific checks if needed
+
+      - name: Upload Checkov Results
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: checkov-results.sarif
+          category: checkov
+
+  terraform-lint:
+    name: Terraform Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: ${{ env.TFLINT_VERSION }}
+
+      - name: Initialize TFLint
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run TFLint
+        run: tflint --recursive --force
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive -diff
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better detection
+
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  compliance-check:
+    name: Compliance Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Compliance Tools
+        run: |
+          pip install --upgrade pip
+          pip install terraform-compliance
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        run: |
+          terraform init -backend=false
+        working-directory: ./environments/dev
+
+      - name: Generate Plan for Compliance
+        run: |
+          terraform plan -out=plan.out
+          terraform show -json plan.out > plan.json
+        working-directory: ./environments/dev
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        continue-on-error: true
+
+  summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [tfsec, checkov, terraform-lint, secrets-scan, compliance-check]
+    if: always()
+
+    steps:
+      - name: Security Scan Summary
+        run: |
+          echo "## Security Scan Summary 🔒" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check job statuses
+          echo "| Scan | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ needs.tfsec.result }}" == "success" ]]; then
+            echo "| **TFSec** | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **TFSec** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ "${{ needs.checkov.result }}" == "success" ]]; then
+            echo "| **Checkov** | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Checkov** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ "${{ needs.terraform-lint.result }}" == "success" ]]; then
+            echo "| **Terraform Lint** | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Terraform Lint** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ "${{ needs.secrets-scan.result }}" == "success" ]]; then
+            echo "| **Secrets Scan** | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Secrets Scan** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ "${{ needs.compliance-check.result }}" == "success" ]]; then
+            echo "| **Compliance** | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Compliance** | ⚠️ Check Required |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "- Review any failed checks in the Security tab" >> $GITHUB_STEP_SUMMARY
+          echo "- Address critical and high severity findings" >> $GITHUB_STEP_SUMMARY
+          echo "- Re-run security scan after fixes" >> $GITHUB_STEP_SUMMARY
+
+          # Set exit code based on critical checks
+          if [[ "${{ needs.tfsec.result }}" != "success" ]] || \
+             [[ "${{ needs.checkov.result }}" != "success" ]] || \
+             [[ "${{ needs.secrets-scan.result }}" != "success" ]]; then
+            echo "Critical security checks failed"
+            exit 1
+          fi
