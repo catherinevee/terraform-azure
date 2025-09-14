@@ -6,7 +6,19 @@
 [![Infrastructure Status](https://img.shields.io/github/deployments/catherinevee/terraform-azure/prod?label=Infrastructure)](https://github.com/catherinevee/terraform-azure/deployments)
 [![Last Commit](https://img.shields.io/github/last-commit/catherinevee/terraform-azure?label=Last%20Commit)](https://github.com/catherinevee/terraform-azure/commits/main)
 
-## Deployment Status
+## CI/CD Pipeline
+
+The repository includes a comprehensive GitHub Actions workflow (`terraform.yml`) that provides:
+
+### Workflow Features
+- **Environment Detection**: Automatically determines target environment based on branch
+- **Security Scanning**: TFSec and Checkov analysis on PRs and scheduled runs
+- **Terraform Validation**: Format checking, validation, and planning
+- **Artifact Management**: Stores Terraform plans and outputs
+- **PR Integration**: Adds plan details as PR comments
+- **Multi-Environment Support**: Handles dev, staging, and production deployments
+
+### Deployment Status
 
 | Badge | Description | Trigger |
 |-------|-------------|---------|
@@ -15,6 +27,12 @@
 | **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
 | **Infrastructure Status** | Production environment deployment status | GitHub deployments |
 | **Last Commit** | Shows repository activity and freshness | On every commit |
+
+### Branch Strategy
+- **main** → Production environment (auto-deploy)
+- **develop** → Staging environment (auto-deploy)
+- **feature/** → Development environment (plan only)
+- **PRs** → Development environment (validation only)
 
 ## Overview
 
@@ -41,6 +59,13 @@ This Terraform configuration deploys a scalable, secure web application infrastr
 
 ## Prerequisites
 
+### For CI/CD Deployment (Recommended)
+- GitHub account with repository access
+- Azure subscription with appropriate permissions
+- Azure Service Principal with Contributor role
+- GitHub Secrets configured (see Quick Start section)
+
+### For Manual Deployment
 - Azure subscription with appropriate permissions
 - Azure CLI installed and authenticated
 - Terraform >= 1.5.0
@@ -48,57 +73,51 @@ This Terraform configuration deploys a scalable, secure web application infrastr
 
 ## Quick Start
 
-### 1. Clone the Repository
+### Automated Deployment (Recommended)
+
+This infrastructure uses GitHub Actions for automated CI/CD deployment:
+
+1. **Fork this repository** to your GitHub account
+
+2. **Set up GitHub Secrets** in your repository settings:
+   - `ARM_CLIENT_ID` - Azure Service Principal Client ID
+   - `ARM_CLIENT_SECRET` - Azure Service Principal Secret
+   - `ARM_SUBSCRIPTION_ID` - Azure Subscription ID
+   - `ARM_TENANT_ID` - Azure Tenant ID
+   - `BACKEND_RESOURCE_GROUP` - Resource group for Terraform state
+   - `BACKEND_STORAGE_ACCOUNT` - Storage account for Terraform state
+   - `BACKEND_CONTAINER` - Container name for Terraform state
+
+3. **Configure environments** (optional):
+   - Edit `environments/dev/terraform.tfvars` for development settings
+   - Edit `environments/staging/terraform.tfvars` for staging settings
+   - Edit `environments/prod/terraform.tfvars` for production settings
+
+4. **Deploy infrastructure**:
+   - Push to `main` branch → deploys to production
+   - Push to `develop` branch → deploys to staging
+   - Create PR → validates and plans deployment to dev
+   - Manual dispatch → choose environment and action
+
+### Manual Deployment (Alternative)
+
+For local development and testing:
+
 ```bash
-git clone <repository-url>
+# 1. Clone the repository
+git clone https://github.com/catherinevee/terraform-azure.git
 cd terraform-azure
-```
 
-### 2. Set Up Backend Storage
-```bash
-# Create resource group for Terraform state
-az group create --name rg-terraform-state --location eastus2
+# 2. Authenticate with Azure
+az login
 
-# Create storage account (replace 12345 with random numbers)
-az storage account create \
-  --name stterraformstate12345 \
-  --resource-group rg-terraform-state \
-  --location eastus2 \
-  --sku Standard_LRS \
-  --encryption-services blob
+# 3. Navigate to desired environment
+cd environments/dev  # or staging/prod
 
-# Create container
-az storage container create \
-  --name tfstate \
-  --account-name stterraformstate12345 \
-  --auth-mode login
-```
-
-### 3. Update Backend Configuration
-Edit the `backend.tf` files in each environment folder with your storage account name.
-
-### 4. Configure Environment Variables
-Edit the `terraform.tfvars` file in your target environment folder:
-- Replace `YOUR_OFFICE_IP/32` with your actual IP address
-- Update `admin_email` with your email
-- Modify other variables as needed
-
-### 5. Deploy Infrastructure
-
-#### Development Environment
-```bash
-cd environments/dev
+# 4. Initialize and deploy
 terraform init
-terraform plan -var-file="terraform.tfvars"
-terraform apply -var-file="terraform.tfvars"
-```
-
-#### Production Environment
-```bash
-cd environments/prod
-terraform init
-terraform plan -var-file="terraform.tfvars"
-terraform apply -var-file="terraform.tfvars"
+terraform plan
+terraform apply
 ```
 
 ## Directory Structure
@@ -396,4 +415,4 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ---
 
-**Note**: This infrastructure is designed for production use but requires proper configuration of secrets, IP addresses, and other environment-specific settings before deployment.# Trigger workflow
+**Note**: This infrastructure is designed for production use but requires proper configuration of secrets, IP addresses, and other environment-specific settings before deployment.
