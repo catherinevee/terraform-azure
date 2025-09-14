@@ -6,7 +6,13 @@
       "Bash(gh:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(SUBSCRIPTION_ID=\"48421ac6-de0a-47d9-8a76-2166ceafcfe6\")",
+      "Bash(SP_NAME=\"sp-terraform-cicd-catherinevee\")",
+      "Bash(git push:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []
