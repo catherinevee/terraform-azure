@@ -6,65 +6,26 @@
 [![Infrastructure Status](https://img.shields.io/github/deployments/catherinevee/terraform-azure/prod?label=Infrastructure)](https://github.com/catherinevee/terraform-azure/deployments)
 [![Last Commit](https://img.shields.io/github/last-commit/catherinevee/terraform-azure?label=Last%20Commit)](https://github.com/catherinevee/terraform-azure/commits/main)
 
-## CI/CD Pipeline
-
-The repository includes comprehensive GitHub Actions workflows:
-
-### Primary Workflows
-
-#### Terraform Deployment (`terraform.yml`)
-- **Environment Detection**: Automatically determines target environment based on branch
-- **Terraform Validation**: Format checking, validation, and planning
-- **Artifact Management**: Stores Terraform plans and outputs
-- **PR Integration**: Adds plan details as PR comments
-- **Multi-Environment Support**: Handles dev, staging, and production deployments
-
-#### Security Scanning (`security.yml`)
-- **TFSec**: Infrastructure security scanning
-- **Checkov**: Compliance and security policy checks
-- **Terraform Lint**: Code quality and formatting validation
-- **Secrets Detection**: TruffleHog and Gitleaks scanning
-- **Compliance Check**: Policy-as-code validation
-- **SARIF Integration**: Results uploaded to GitHub Security tab
-
-### Deployment Status
-
-| Badge | Description | Trigger |
-|-------|-------------|---------|
-| **Terraform Deployment** | Unified workflow: validation and deployment | Push to main/develop, PRs, manual |
-| **Security Scan** | Comprehensive security analysis (TFSec, Checkov, Secrets, Compliance) | Weekly schedule, PRs, and pushes |
-| **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
-| **Infrastructure Status** | Production environment deployment status | GitHub deployments |
-| **Last Commit** | Shows repository activity and freshness | On every commit |
-
-### Branch Strategy
-- **main** → Production environment (auto-deploy)
-- **develop** → Staging environment (auto-deploy)
-- **feature/** → Development environment (plan only)
-- **PRs** → Development environment (validation only)
-
 ## Overview
 
-This Terraform configuration deploys a scalable, secure web application infrastructure on Azure with advanced networking capabilities using Azure Virtual WAN (vWAN). The infrastructure is designed for enterprise-grade deployments with high availability, security, and global connectivity.
+Enterprise-grade Azure infrastructure deployment using Terraform with Virtual WAN (vWAN) for global connectivity. This solution provides a scalable, secure web application platform with automated CI/CD pipelines, comprehensive security scanning, and multi-environment support.
 
-**Deployment Target**: Infrastructure is deployed to Azure East US 2 (primary) and West US 2 (secondary for production), using Azure subscription ID `48421ac6-de0a-47d9-8a76-2166ceafcfe6`.
+### Key Features
+- **Global Connectivity**: Azure Virtual WAN with hub-spoke topology
+- **High Availability**: Multi-region deployment with automatic failover
+- **Security-First**: Azure Firewall, NSGs, and private endpoints
+- **Automated Deployment**: GitHub Actions CI/CD with branch-based environments
+- **Compliance Ready**: Built-in security scanning and policy validation
 
-## Architecture Diagrams
+### Deployment Target
+- **Primary Region**: Azure East US 2
+- **Secondary Region**: West US 2 (Production only)
+- **Azure Subscription**: `48421ac6-de0a-47d9-8a76-2166ceafcfe6`
+- **Environments**: Development, Staging, Production
 
-### High-Level Architecture
-![Terraform Modules Architecture](docs/diagrams/terraform-modules-architecture.png)
+## Architecture
 
-### Terraform Dependency Graph
-![Terraform Architecture Diagram](docs/diagrams/terraform-architecture-diagram.png)
-
-*Additional diagrams available:*
-- [High-level SVG](docs/diagrams/terraform-modules-architecture.svg)
-- [Dependency graph SVG](docs/diagrams/terraform-architecture-diagram.svg)
-- [Development environment diagram](docs/diagrams/terraform-dev-architecture-diagram.png)
-
-## Architecture Components
-
-### Core Infrastructure
+### Core Infrastructure Components
 - **Azure Virtual WAN**: Global transit network backbone with hub-spoke topology
 - **Virtual Network**: Segmented network with dedicated subnets for different tiers
 - **Application Gateway**: Layer 7 load balancer with WAF protection
@@ -81,23 +42,38 @@ This Terraform configuration deploys a scalable, secure web application infrastr
 - **ExpressRoute**: Private connectivity for on-premises integration
 - **Network Security Groups**: Granular access control at subnet level
 
-## Prerequisites
+### Architecture Diagrams
 
-### For CI/CD Deployment (Recommended)
+#### High-Level Architecture
+![Terraform Modules Architecture](docs/diagrams/terraform-modules-architecture.png)
+
+#### Terraform Dependency Graph
+![Terraform Architecture Diagram](docs/diagrams/terraform-architecture-diagram.png)
+
+*Additional diagrams available:*
+- [High-level SVG](docs/diagrams/terraform-modules-architecture.svg)
+- [Dependency graph SVG](docs/diagrams/terraform-architecture-diagram.svg)
+- [Development environment diagram](docs/diagrams/terraform-dev-architecture-diagram.png)
+
+## Getting Started
+
+### Prerequisites
+
+#### For CI/CD Deployment (Recommended)
 - GitHub account with repository access
 - Azure subscription with appropriate permissions
 - Azure Service Principal with Contributor role
 - GitHub Secrets configured (see Quick Start section)
 
-### For Manual Deployment
+#### For Manual Deployment
 - Azure subscription with appropriate permissions
 - Azure CLI installed and authenticated
 - Terraform >= 1.5.0
 - Git for version control
 
-## Quick Start
+### Quick Start
 
-### Automated Deployment (Recommended)
+#### Automated Deployment (Recommended)
 
 This infrastructure uses GitHub Actions for automated CI/CD deployment:
 
@@ -123,7 +99,7 @@ This infrastructure uses GitHub Actions for automated CI/CD deployment:
    - Create PR → validates and plans deployment to dev
    - Manual dispatch → choose environment and action
 
-### Manual Deployment (Alternative)
+#### Manual Deployment (Alternative)
 
 For local development and testing:
 
@@ -155,6 +131,41 @@ Automated setup scripts are available in the `scripts/` directory:
 - **Linux/macOS/Git Bash**: `scripts/setup-pipeline.sh`
 
 These scripts automate the creation of Azure resources and GitHub secrets needed for CI/CD.
+
+## CI/CD Pipeline
+
+### Primary Workflows
+
+#### Terraform Deployment (`terraform.yml`)
+- **Environment Detection**: Automatically determines target environment based on branch
+- **Terraform Validation**: Format checking, validation, and planning
+- **Artifact Management**: Stores Terraform plans and outputs
+- **PR Integration**: Adds plan details as PR comments
+- **Multi-Environment Support**: Handles dev, staging, and production deployments
+
+#### Security Scanning (`security.yml`)
+- **TFSec**: Infrastructure security scanning
+- **Checkov**: Compliance and security policy checks
+- **Terraform Lint**: Code quality and formatting validation
+- **Secrets Detection**: TruffleHog and Gitleaks scanning
+- **Compliance Check**: Policy-as-code validation
+- **SARIF Integration**: Results uploaded to GitHub Security tab
+
+### Branch Strategy
+- **main** → Production environment (auto-deploy)
+- **develop** → Staging environment (auto-deploy)
+- **feature/** → Development environment (plan only)
+- **PRs** → Development environment (validation only)
+
+### Workflow Status
+
+| Badge | Description | Trigger |
+|-------|-------------|---------|
+| **Terraform Deployment** | Unified workflow: validation and deployment | Push to main/develop, PRs, manual |
+| **Security Scan** | Comprehensive security analysis | Weekly schedule, PRs, and pushes |
+| **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
+| **Infrastructure Status** | Production environment deployment status | GitHub deployments |
+| **Last Commit** | Shows repository activity and freshness | On every commit |
 
 ## Directory Structure
 
