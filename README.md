@@ -1,31 +1,20 @@
 # Production-Ready Azure Terraform Deployment with vWAN
 
-[![Terraform Deploy](https://github.com/catherinevee/terraform-azure/workflows/Terraform%20Simple/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-simple.yml)
-[![Terraform CI/CD](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-cicd.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-cicd.yml)
-[![Terraform Deploy Pipeline](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-deploy.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-deploy.yml)
-[![Dependabot Updates](https://github.com/catherinevee/terraform-azure/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/catherinevee/terraform-azure/network/updates)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Terraform](https://img.shields.io/badge/Terraform->=1.5.0-purple.svg)](https://www.terraform.io/)
-[![Azure](https://img.shields.io/badge/Azure-Cloud-blue.svg)](https://azure.microsoft.com/)
-[![Infrastructure](https://img.shields.io/badge/Infrastructure-vWAN-orange.svg)](https://azure.microsoft.com/en-us/services/virtual-wan/)
-[![Security](https://img.shields.io/badge/Security-Enabled-green.svg)](https://github.com/catherinevee/terraform-azure/security)
+[![CI/CD Pipeline](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-cicd.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-cicd.yml)
+[![Deploy Status](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-deploy.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-deploy.yml)
+[![Security Scan](https://img.shields.io/github/actions/workflow/status/catherinevee/terraform-azure/terraform-cicd.yml?label=Security%20Scan&event=schedule)](https://github.com/catherinevee/terraform-azure/security)
+[![Dependencies](https://github.com/catherinevee/terraform-azure/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/catherinevee/terraform-azure/network/updates)
+[![Last Commit](https://img.shields.io/github/last-commit/catherinevee/terraform-azure?label=Last%20Commit)](https://github.com/catherinevee/terraform-azure/commits/main)
 
-## CI/CD Status Dashboard
+## Deployment Status
 
-### Environment Deployments
-| Environment | Status | Last Deployed | Auto-Deploy |
-|-------------|--------|---------------|-------------|
-| **Development** | [![Dev Deploy](https://github.com/catherinevee/terraform-azure/workflows/Terraform%20Simple/badge.svg?branch=develop)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-simple.yml) | On push to `develop` | ✅ Enabled |
-| **Staging** | [![Staging Deploy](https://github.com/catherinevee/terraform-azure/workflows/Terraform%20Simple/badge.svg?branch=staging)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-simple.yml) | On push to `staging` | ✅ Enabled |
-| **Production** | [![Prod Deploy](https://github.com/catherinevee/terraform-azure/workflows/Terraform%20Simple/badge.svg?branch=main)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-simple.yml) | On push to `main` | ⚠️ Manual Approval |
-
-### Automated Checks
-| Check | Status | Schedule |
-|-------|--------|----------|
-| **Security Scanning** | [![Security](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-cicd.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/security) | On every PR |
-| **Dependency Updates** | [![Dependabot](https://github.com/catherinevee/terraform-azure/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/catherinevee/terraform-azure/network/updates) | Weekly (Monday 4 AM) |
-| **Drift Detection** | [![Drift Check](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-cicd.yml/badge.svg?event=schedule)](https://github.com/catherinevee/terraform-azure/actions) | Weekly (Monday 2 AM) |
-| **Cost Analysis** | [![Cost](https://img.shields.io/badge/Cost-Monitored-yellow.svg)](https://github.com/catherinevee/terraform-azure/actions) | On every PR |
+| Badge | Description | Trigger |
+|-------|-------------|---------|
+| **CI/CD Pipeline** | Full validation, security scanning, and deployment pipeline | Push to main/develop, PRs |
+| **Deploy Status** | Terraform deployment workflow for all environments | Manual or push triggers |
+| **Security Scan** | TFSec, Checkov, and Trivy security analysis | Weekly schedule & PRs |
+| **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
+| **Last Commit** | Shows repository activity and freshness | On every commit |
 
 ## Overview
 
