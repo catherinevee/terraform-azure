@@ -95,10 +95,10 @@ resource "azurerm_monitor_metric_alert" "app_gateway_unhealthy" {
 
 # vWAN Hub Health Alert
 resource "azurerm_monitor_metric_alert" "vwan_hub_health" {
-  for_each            = toset(var.vwan_hub_ids)
-  name                = "alert-${var.name_prefix}-vwan-hub-${substr(each.key, -8, -1)}"
+  count               = length(var.vwan_hub_ids)
+  name                = "alert-${var.name_prefix}-vwan-hub-${count.index}"
   resource_group_name = var.resource_group_name
-  scopes              = [each.value]
+  scopes              = [var.vwan_hub_ids[count.index]]
   description         = "Alert for vWAN hub health issues"
   severity            = 1
   frequency           = "PT5M"
