@@ -1,0 +1,82 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars.local
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Environment variables and secrets
+.env
+*.env
+.env.*
+secrets/
+**/secrets/
+.github/secrets-example.env
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Backup files
+*.bak
+*.backup
+
+# Azure CLI
+.azure/
+
+# Python (for any scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+
+# Node (for any tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Pipeline artifacts
+tfplan-*
+plan-output.txt
+cost-report.txt
+drift-report.txt
+
+# Local testing
+test/
+tests/
+*.test
+*.spec
+
+# Documentation build
+docs/_build/
+site/

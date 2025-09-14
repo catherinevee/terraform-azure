@@ -1,0 +1,30 @@
+# This file defines code ownership for automatic PR review assignments
+# Each line is a file pattern followed by one or more owners
+
+# Global owners for all files
+* @terraform-user
+
+# Terraform configuration files
+*.tf @terraform-user @terraform-user
+*.tfvars @terraform-user @terraform-user
+
+# Module-specific owners
+/modules/vwan/ @terraform-user @terraform-user
+/modules/networking/ @terraform-user @terraform-user
+/modules/security/ @terraform-user @terraform-user
+/modules/database/ @terraform-user @terraform-user
+/modules/compute/ @terraform-user @terraform-user
+/modules/monitoring/ @terraform-user @terraform-user
+
+# Environment-specific owners
+/environments/prod/ @terraform-user @terraform-user
+/environments/staging/ @terraform-user @terraform-user
+/environments/dev/ @terraform-user @terraform-user
+
+# CI/CD Pipeline
+/.github/workflows/ @terraform-user @terraform-user
+/.github/dependabot.yml @terraform-user @terraform-user
+
+# Documentation
+README.md @terraform-user
+*.md @terraform-user @terraform-user

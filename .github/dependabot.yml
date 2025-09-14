@@ -1,0 +1,55 @@
+version: 2
+updates:
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+    reviewers:
+      - "terraform-user"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Enable version updates for Terraform
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+    reviewers:
+      - "terraform-user"
+    labels:
+      - "dependencies"
+      - "terraform"
+
+  # Check each environment directory
+  - package-ecosystem: "terraform"
+    directory: "/environments/dev"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "dev"
+
+  - package-ecosystem: "terraform"
+    directory: "/environments/staging"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "staging"
+
+  - package-ecosystem: "terraform"
+    directory: "/environments/prod"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "prod"
