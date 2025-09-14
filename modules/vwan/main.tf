@@ -205,18 +205,6 @@ resource "azurerm_vpn_gateway_connection" "branches" {
     vpn_site_link_id = azurerm_vpn_site.branches[each.key].link[0].id
 
     bgp_enabled = true
-
-    ipsec_policy {
-      sa_lifetime_seconds    = 3600
-      sa_data_size_kilobytes = 102400000
-      encryption_algorithm   = "AES256"
-      integrity_algorithm    = "SHA256"
-      ike_encryption_algorithm = "AES256"
-      ike_integrity_algorithm  = "SHA256"
-      dh_group              = "DHGroup14"
-      pfs_group             = "PFS14"
-    }
-
     shared_key = each.value.pre_shared_key
   }
 }
