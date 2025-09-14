@@ -484,7 +484,7 @@ jobs:
 
       - name: Download Plan Artifact
         if: github.event.inputs.action != 'destroy'
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: tfplan-${{ env.ENVIRONMENT }}-${{ github.sha }}
           path: environments/${{ env.ENVIRONMENT }}
