@@ -328,7 +328,7 @@ jobs:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - name: Configure Azure credentials
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: |
             {
@@ -472,7 +472,7 @@ jobs:
           terraform_wrapper: false
 
       - name: Configure Azure credentials
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: |
             {
@@ -636,7 +636,7 @@ jobs:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - name: Configure Azure credentials
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: |
             {
