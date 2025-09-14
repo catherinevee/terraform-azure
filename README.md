@@ -3,6 +3,7 @@
 **🌎 Deployment Regions: East US 2 (Primary) | West US 2 (DR)**
 
 [![Terraform CI/CD](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
+[![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
 
 ## Overview
 
