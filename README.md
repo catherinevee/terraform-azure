@@ -386,4 +386,4 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ---
 
-**Note**: This infrastructure is designed for production use but requires proper configuration of secrets, IP addresses, and other environment-specific settings before deployment.
+**Note**: This infrastructure is designed for production use but requires proper configuration of secrets, IP addresses, and other environment-specific settings before deployment.# Trigger workflow
