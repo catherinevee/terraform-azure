@@ -63,6 +63,7 @@ module "networking" {
 
   # vWAN connection
   vwan_hub_id            = module.vwan.hub_id
+  vwan_route_table_id    = module.vwan.default_route_table_id
   enable_vwan_connection = true
 
   subnet_configs = {

@@ -18,7 +18,7 @@ resource "azurerm_virtual_hub_connection" "main" {
     associated_route_table_id = var.vwan_route_table_id
 
     propagated_route_table {
-      route_table_ids = [var.vwan_route_table_id]
+      route_table_ids = var.vwan_route_table_id != null ? [var.vwan_route_table_id] : []
     }
 
     static_vnet_route {
@@ -40,11 +40,12 @@ resource "azurerm_subnet" "subnets" {
   service_endpoints    = try(each.value.service_endpoints, [])
 
   dynamic "delegation" {
-    for_each = can(each.value.delegation) ? [each.value.delegation] : []
+    for_each = try(each.value.delegation, null) != null ? [each.value.delegation] : []
     content {
       name = "delegation"
       service_delegation {
-        name = delegation.value
+        name    = delegation.value
+        actions = try(each.value.delegation_actions, [])
       }
     }
   }

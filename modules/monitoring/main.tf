@@ -183,9 +183,9 @@ resource "azurerm_monitor_diagnostic_setting" "vwan" {
 
 # Diagnostic Settings for vWAN Hubs
 resource "azurerm_monitor_diagnostic_setting" "vwan_hubs" {
-  for_each                   = toset(var.vwan_hub_ids)
-  name                       = "diag-${var.name_prefix}-hub-${substr(each.key, -8, -1)}"
-  target_resource_id         = each.value
+  count                      = length(var.vwan_hub_ids)
+  name                       = "diag-${var.name_prefix}-hub-${count.index}"
+  target_resource_id         = var.vwan_hub_ids[count.index]
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
 
   enabled_log {

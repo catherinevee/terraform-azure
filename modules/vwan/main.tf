@@ -263,6 +263,7 @@ resource "azurerm_express_route_connection" "circuits" {
 
 # Hub Route Table (Custom Routes)
 resource "azurerm_virtual_hub_route_table" "main" {
+  count          = var.enable_firewall ? 1 : 0
   name           = "RT-${var.name_prefix}"
   virtual_hub_id = azurerm_virtual_hub.primary.id
 
@@ -271,7 +272,7 @@ resource "azurerm_virtual_hub_route_table" "main" {
     destinations_type = "CIDR"
     destinations      = ["0.0.0.0/0"]
     next_hop_type     = "ResourceId"
-    next_hop          = var.enable_firewall ? azurerm_firewall.primary[0].id : null
+    next_hop          = azurerm_firewall.primary[0].id
   }
 
   route {
@@ -279,7 +280,7 @@ resource "azurerm_virtual_hub_route_table" "main" {
     destinations_type = "CIDR"
     destinations      = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
     next_hop_type     = "ResourceId"
-    next_hop          = var.enable_firewall ? azurerm_firewall.primary[0].id : null
+    next_hop          = azurerm_firewall.primary[0].id
   }
 }
 
