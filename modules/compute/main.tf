@@ -4,9 +4,9 @@ resource "azurerm_public_ip" "app_gateway" {
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
-  sku                = "Standard"
-  domain_name_label  = "${var.name_prefix}-app"
-  tags               = var.tags
+  sku                 = "Standard"
+  domain_name_label   = "${var.name_prefix}-app"
+  tags                = var.tags
 }
 
 # Application Gateway
@@ -14,7 +14,7 @@ resource "azurerm_application_gateway" "main" {
   name                = "agw-${var.name_prefix}"
   resource_group_name = var.resource_group_name
   location            = var.location
-  tags               = var.tags
+  tags                = var.tags
 
   sku {
     name     = "Standard_v2"
@@ -52,14 +52,14 @@ resource "azurerm_application_gateway" "main" {
     port                  = 80
     protocol              = "Http"
     request_timeout       = 30
-    probe_name           = "health-probe"
+    probe_name            = "health-probe"
   }
 
   http_listener {
     name                           = "http-listener"
     frontend_ip_configuration_name = "frontend-ip"
-    frontend_port_name            = "http-port"
-    protocol                      = "Http"
+    frontend_port_name             = "http-port"
+    protocol                       = "Http"
   }
 
   request_routing_rule {
@@ -99,10 +99,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "app" {
   name                = "vmss-${var.name_prefix}"
   resource_group_name = var.resource_group_name
   location            = var.location
-  sku                = var.vm_sku
-  instances          = var.vm_instances.default
-  admin_username     = "azureuser"
-  tags               = var.tags
+  sku                 = var.vm_sku
+  instances           = var.vm_instances.default
+  admin_username      = "azureuser"
+  tags                = var.tags
 
   admin_ssh_key {
     username   = "azureuser"

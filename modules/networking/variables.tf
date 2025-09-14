@@ -29,7 +29,7 @@ variable "subnet_configs" {
   type = map(object({
     address_prefixes  = list(string)
     service_endpoints = optional(list(string), [])
-    delegation       = optional(string, null)
+    delegation        = optional(string, null)
   }))
 }
 

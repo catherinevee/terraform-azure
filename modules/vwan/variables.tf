@@ -64,10 +64,10 @@ variable "allowed_ip_ranges" {
 variable "branch_sites" {
   description = "Branch site configurations for S2S VPN"
   type = map(object({
-    address_space = list(string)
+    address_space       = list(string)
     vpn_gateway_address = string
-    pre_shared_key = string
-    bandwidth_mbps = number
+    pre_shared_key      = string
+    bandwidth_mbps      = number
   }))
   default = {}
 }
@@ -77,9 +77,9 @@ variable "express_route_circuits" {
   type = map(object({
     service_provider = string
     peering_location = string
-    bandwidth_mbps = number
-    sku_tier = string
-    sku_family = string
+    bandwidth_mbps   = number
+    sku_tier         = string
+    sku_family       = string
   }))
   default = {}
 }

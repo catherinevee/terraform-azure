@@ -4,7 +4,7 @@ resource "azurerm_virtual_network" "main" {
   resource_group_name = var.resource_group_name
   location            = var.location
   address_space       = var.vnet_address_space
-  tags               = var.tags
+  tags                = var.tags
 }
 
 # vWAN Hub Connection
@@ -57,7 +57,7 @@ resource "azurerm_network_security_group" "nsgs" {
   name                = "nsg-${var.name_prefix}-${each.key}"
   resource_group_name = var.resource_group_name
   location            = var.location
-  tags               = var.tags
+  tags                = var.tags
 }
 
 # NSG Rules for Application Gateway
@@ -67,12 +67,12 @@ resource "azurerm_network_security_rule" "gateway_inbound_http" {
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
-  source_port_range          = "*"
-  destination_port_range     = "80"
-  source_address_prefix      = "Internet"
-  destination_address_prefix = "*"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "Internet"
+  destination_address_prefix  = "*"
   network_security_group_name = azurerm_network_security_group.nsgs["gateway"].name
-  resource_group_name        = var.resource_group_name
+  resource_group_name         = var.resource_group_name
 }
 
 resource "azurerm_network_security_rule" "gateway_inbound_https" {
@@ -81,12 +81,12 @@ resource "azurerm_network_security_rule" "gateway_inbound_https" {
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
-  source_port_range          = "*"
-  destination_port_range     = "443"
-  source_address_prefix      = "Internet"
-  destination_address_prefix = "*"
+  source_port_range           = "*"
+  destination_port_range      = "443"
+  source_address_prefix       = "Internet"
+  destination_address_prefix  = "*"
   network_security_group_name = azurerm_network_security_group.nsgs["gateway"].name
-  resource_group_name        = var.resource_group_name
+  resource_group_name         = var.resource_group_name
 }
 
 resource "azurerm_network_security_rule" "gateway_health_probe" {
@@ -95,12 +95,12 @@ resource "azurerm_network_security_rule" "gateway_health_probe" {
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
-  source_port_range          = "*"
-  destination_port_range     = "65200-65535"
-  source_address_prefix      = "GatewayManager"
-  destination_address_prefix = "*"
+  source_port_range           = "*"
+  destination_port_range      = "65200-65535"
+  source_address_prefix       = "GatewayManager"
+  destination_address_prefix  = "*"
   network_security_group_name = azurerm_network_security_group.nsgs["gateway"].name
-  resource_group_name        = var.resource_group_name
+  resource_group_name         = var.resource_group_name
 }
 
 # Allow traffic from vWAN hub
@@ -112,12 +112,12 @@ resource "azurerm_network_security_rule" "allow_vwan_hub" {
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "*"
-  source_port_range          = "*"
-  destination_port_range     = "*"
-  source_address_prefix      = "10.100.0.0/24"  # vWAN hub prefix
-  destination_address_prefix = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "10.100.0.0/24" # vWAN hub prefix
+  destination_address_prefix  = "*"
   network_security_group_name = azurerm_network_security_group.nsgs[each.key].name
-  resource_group_name        = var.resource_group_name
+  resource_group_name         = var.resource_group_name
 }
 
 # NSG Associations
@@ -146,7 +146,7 @@ resource "azurerm_route" "to_vwan" {
   route_table_name       = azurerm_route_table.vwan_routes[0].name
   address_prefix         = "0.0.0.0/0"
   next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = "10.100.0.68"  # Azure Firewall IP in vWAN hub
+  next_hop_in_ip_address = "10.100.0.68" # Azure Firewall IP in vWAN hub
 }
 
 # Associate route table with subnets (except gateway subnet)
@@ -166,5 +166,5 @@ resource "azurerm_network_ddos_protection_plan" "main" {
   name                = "ddos-${var.name_prefix}"
   resource_group_name = var.resource_group_name
   location            = var.location
-  tags               = var.tags
+  tags                = var.tags
 }

@@ -3,9 +3,9 @@ resource "azurerm_log_analytics_workspace" "main" {
   name                = "log-${var.name_prefix}"
   resource_group_name = var.resource_group_name
   location            = var.location
-  sku                = "PerGB2018"
+  sku                 = "PerGB2018"
   retention_in_days   = 30
-  tags               = var.tags
+  tags                = var.tags
 }
 
 # Action Group for alerts
@@ -13,7 +13,7 @@ resource "azurerm_monitor_action_group" "main" {
   name                = "ag-${var.name_prefix}"
   resource_group_name = var.resource_group_name
   short_name          = "alerts"
-  tags               = var.tags
+  tags                = var.tags
 
   email_receiver {
     name          = "admin"
@@ -30,7 +30,7 @@ resource "azurerm_monitor_metric_alert" "vmss_cpu" {
   severity            = 2
   frequency           = "PT5M"
   window_size         = "PT15M"
-  tags               = var.tags
+  tags                = var.tags
 
   criteria {
     metric_namespace = "Microsoft.Compute/virtualMachineScaleSets"
@@ -54,7 +54,7 @@ resource "azurerm_monitor_metric_alert" "database_cpu" {
   severity            = 2
   frequency           = "PT5M"
   window_size         = "PT15M"
-  tags               = var.tags
+  tags                = var.tags
 
   criteria {
     metric_namespace = "Microsoft.DBforPostgreSQL/flexibleServers"
@@ -78,7 +78,7 @@ resource "azurerm_monitor_metric_alert" "app_gateway_unhealthy" {
   severity            = 1
   frequency           = "PT1M"
   window_size         = "PT5M"
-  tags               = var.tags
+  tags                = var.tags
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
@@ -103,7 +103,7 @@ resource "azurerm_monitor_metric_alert" "vwan_hub_health" {
   severity            = 1
   frequency           = "PT5M"
   window_size         = "PT15M"
-  tags               = var.tags
+  tags                = var.tags
 
   criteria {
     metric_namespace = "Microsoft.Network/virtualHubs"
@@ -128,7 +128,7 @@ resource "azurerm_monitor_metric_alert" "vpn_connection" {
   severity            = 2
   frequency           = "PT5M"
   window_size         = "PT15M"
-  tags               = var.tags
+  tags                = var.tags
 
   criteria {
     metric_namespace = "Microsoft.Network/vpnGateways"

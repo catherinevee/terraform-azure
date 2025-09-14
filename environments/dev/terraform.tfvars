@@ -1,6 +1,6 @@
-project_name = "webapp"
-environment  = "dev"
-location     = "eastus2"
+project_name   = "webapp"
+environment    = "dev"
+location       = "eastus2"
 location_short = "eus2"
 
 vm_sku = "Standard_B2s"
@@ -18,7 +18,7 @@ tags = {
 }
 
 allowed_ip_ranges = [
-  "203.0.113.42/32"  # Replace with your IP
+  "203.0.113.42/32" # Replace with your IP
 ]
 
 admin_email = "terraform-admin@example.com"

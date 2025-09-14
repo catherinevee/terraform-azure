@@ -81,8 +81,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "vwan" {
         type = "Http"
         port = 80
       }
-      source_addresses      = ["10.0.0.0/8"]
-      destination_fqdns     = ["*"]
+      source_addresses  = ["10.0.0.0/8"]
+      destination_fqdns = ["*"]
     }
   }
 
@@ -129,7 +129,7 @@ resource "azurerm_firewall" "primary" {
   tags                = var.tags
 
   virtual_hub {
-    virtual_hub_id = azurerm_virtual_hub.primary.id
+    virtual_hub_id  = azurerm_virtual_hub.primary.id
     public_ip_count = 1
   }
 }
@@ -146,7 +146,7 @@ resource "azurerm_firewall" "secondary" {
   tags                = var.tags
 
   virtual_hub {
-    virtual_hub_id = azurerm_virtual_hub.secondary[0].id
+    virtual_hub_id  = azurerm_virtual_hub.secondary[0].id
     public_ip_count = 1
   }
 }
@@ -207,14 +207,14 @@ resource "azurerm_vpn_gateway_connection" "branches" {
     bgp_enabled = true
 
     ipsec_policy {
-      sa_lifetime_sec          = 3600
-      sa_data_size_kb          = 102400000
-      ipsec_encryption         = "AES256"
-      ipsec_integrity          = "SHA256"
-      ike_encryption           = "AES256"
-      ike_integrity            = "SHA256"
-      dh_group                 = "DHGroup14"
-      pfs_group                = "PFS14"
+      sa_lifetime_sec  = 3600
+      sa_data_size_kb  = 102400000
+      ipsec_encryption = "AES256"
+      ipsec_integrity  = "SHA256"
+      ike_encryption   = "AES256"
+      ike_integrity    = "SHA256"
+      dh_group         = "DHGroup14"
+      pfs_group        = "PFS14"
     }
 
     shared_key = each.value.pre_shared_key
@@ -277,9 +277,9 @@ resource "azurerm_express_route_circuit_peering" "circuits" {
 
 # ExpressRoute Connections
 resource "azurerm_express_route_connection" "circuits" {
-  for_each                     = var.express_route_circuits
-  name                         = "ercon-${var.name_prefix}-${each.key}"
-  express_route_gateway_id     = azurerm_express_route_gateway.primary[0].id
+  for_each                         = var.express_route_circuits
+  name                             = "ercon-${var.name_prefix}-${each.key}"
+  express_route_gateway_id         = azurerm_express_route_gateway.primary[0].id
   express_route_circuit_peering_id = azurerm_express_route_circuit_peering.circuits[each.key].id
 
   routing {
@@ -315,10 +315,10 @@ resource "azurerm_virtual_hub_route_table" "main" {
 
 # Hub-to-Hub connection (for multi-region)
 resource "azurerm_virtual_hub_connection" "hub_to_hub" {
-  count                     = var.secondary_location != null ? 1 : 0
-  name                      = "hub-connection-${var.name_prefix}"
-  virtual_hub_id            = azurerm_virtual_hub.primary.id
-  remote_virtual_hub_id     = azurerm_virtual_hub.secondary[0].id
+  count                 = var.secondary_location != null ? 1 : 0
+  name                  = "hub-connection-${var.name_prefix}"
+  virtual_hub_id        = azurerm_virtual_hub.primary.id
+  remote_virtual_hub_id = azurerm_virtual_hub.secondary[0].id
 
   routing {
     associated_route_table_id = azurerm_virtual_hub.primary.default_route_table_id

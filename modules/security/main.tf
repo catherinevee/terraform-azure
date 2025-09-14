@@ -3,23 +3,23 @@ data "azurerm_client_config" "current" {}
 
 # Key Vault
 resource "azurerm_key_vault" "main" {
-  name                        = "kv-${replace(var.name_prefix, "-", "")}${random_string.kv_suffix.result}"
-  resource_group_name         = var.resource_group_name
-  location                   = var.location
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  sku_name                   = "standard"
-  enabled_for_disk_encryption = true
-  enabled_for_deployment      = true
+  name                            = "kv-${replace(var.name_prefix, "-", "")}${random_string.kv_suffix.result}"
+  resource_group_name             = var.resource_group_name
+  location                        = var.location
+  tenant_id                       = data.azurerm_client_config.current.tenant_id
+  sku_name                        = "standard"
+  enabled_for_disk_encryption     = true
+  enabled_for_deployment          = true
   enabled_for_template_deployment = true
-  purge_protection_enabled    = true
-  soft_delete_retention_days  = 90
-  tags                       = var.tags
+  purge_protection_enabled        = true
+  soft_delete_retention_days      = 90
+  tags                            = var.tags
 
   network_acls {
     default_action             = "Deny"
     bypass                     = "AzureServices"
     virtual_network_subnet_ids = [var.subnet_id]
-    ip_rules                  = var.allowed_ip_ranges
+    ip_rules                   = var.allowed_ip_ranges
   }
 }
 
@@ -53,10 +53,10 @@ resource "azurerm_key_vault_access_policy" "admin" {
 resource "azurerm_storage_account" "secure" {
   name                     = "st${replace(var.name_prefix, "-", "")}${random_string.storage_suffix.result}"
   resource_group_name      = var.resource_group_name
-  location                = var.location
-  account_tier            = "Standard"
+  location                 = var.location
+  account_tier             = "Standard"
   account_replication_type = "GRS"
-  tags                    = var.tags
+  tags                     = var.tags
 
   identity {
     type = "SystemAssigned"
@@ -78,10 +78,10 @@ resource "azurerm_storage_account" "secure" {
     default_action             = "Deny"
     bypass                     = ["AzureServices"]
     virtual_network_subnet_ids = [var.subnet_id]
-    ip_rules                  = var.allowed_ip_ranges
+    ip_rules                   = var.allowed_ip_ranges
   }
 
-  min_tls_version = "TLS1_2"
+  min_tls_version           = "TLS1_2"
   enable_https_traffic_only = true
 }
 
@@ -98,7 +98,7 @@ resource "azurerm_application_insights" "main" {
   location            = var.location
   application_type    = "web"
   retention_in_days   = 90
-  tags               = var.tags
+  tags                = var.tags
 }
 
 # Store Application Insights key in Key Vault

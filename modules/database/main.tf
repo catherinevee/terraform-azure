@@ -6,17 +6,17 @@ resource "random_password" "db_admin" {
 
 # PostgreSQL Flexible Server
 resource "azurerm_postgresql_flexible_server" "main" {
-  name                = "psql-${var.name_prefix}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  version             = "14"
-  administrator_login = "psqladmin"
-  administrator_password = random_password.db_admin.result
-  sku_name           = var.database_sku
-  storage_mb         = 32768
-  backup_retention_days = var.backup_retention_days
+  name                         = "psql-${var.name_prefix}"
+  resource_group_name          = var.resource_group_name
+  location                     = var.location
+  version                      = "14"
+  administrator_login          = "psqladmin"
+  administrator_password       = random_password.db_admin.result
+  sku_name                     = var.database_sku
+  storage_mb                   = 32768
+  backup_retention_days        = var.backup_retention_days
   geo_redundant_backup_enabled = var.geo_redundant_backup
-  tags               = var.tags
+  tags                         = var.tags
 
   high_availability {
     mode                      = "ZoneRedundant"
@@ -28,7 +28,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
 resource "azurerm_private_dns_zone" "postgresql" {
   name                = "privatelink.postgres.database.azure.com"
   resource_group_name = var.resource_group_name
-  tags               = var.tags
+  tags                = var.tags
 }
 
 # Link DNS Zone to VNet
