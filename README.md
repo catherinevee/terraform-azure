@@ -41,15 +41,15 @@ This Terraform configuration deploys a scalable, secure web application infrastr
 ## Architecture Diagrams
 
 ### High-Level Architecture
-![Terraform Modules Architecture](terraform-modules-architecture.png)
+![Terraform Modules Architecture](docs/diagrams/terraform-modules-architecture.png)
 
 ### Terraform Dependency Graph
-![Terraform Architecture Diagram](terraform-architecture-diagram.png)
+![Terraform Architecture Diagram](docs/diagrams/terraform-architecture-diagram.png)
 
 *Additional diagrams available:*
-- [High-level SVG](terraform-modules-architecture.svg)
-- [Dependency graph SVG](terraform-architecture-diagram.svg)
-- [Development environment diagram](terraform-dev-architecture-diagram.png)
+- [High-level SVG](docs/diagrams/terraform-modules-architecture.svg)
+- [Dependency graph SVG](docs/diagrams/terraform-architecture-diagram.svg)
+- [Development environment diagram](docs/diagrams/terraform-dev-architecture-diagram.png)
 
 ## Architecture Components
 

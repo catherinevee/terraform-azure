@@ -5,6 +5,7 @@
 *.tfvars.local
 .terraform/
 .terraform.lock.hcl
+terraform.tfstate.d/
 crash.log
 crash.*.log
 override.tf
