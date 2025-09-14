@@ -122,9 +122,6 @@ jobs:
     needs: setup
     environment: ${{ needs.setup.outputs.environment }}
 
-    defaults:
-      run:
-        working-directory: ./environments/${{ needs.setup.outputs.environment }}
 
     steps:
       - name: Checkout
@@ -157,15 +154,6 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
         continue-on-error: true
-
-      - name: Debug - List files
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Root files:"
-          ls -la
-          echo "Environment files:"
-          ls -la environments/${{ needs.setup.outputs.environment }}/
 
       - name: Terraform Plan
         id: plan
