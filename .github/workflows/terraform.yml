@@ -158,6 +158,15 @@ jobs:
         run: terraform fmt -check -recursive
         continue-on-error: true
 
+      - name: Debug - List files
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Root files:"
+          ls -la
+          echo "Environment files:"
+          ls -la environments/${{ needs.setup.outputs.environment }}/
+
       - name: Terraform Plan
         id: plan
         run: |
