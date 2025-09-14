@@ -2,11 +2,7 @@
 
 **🌎 Deployment Regions: East US 2 (Primary) | West US 2 (DR)**
 
-[![Terraform Deployment](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
-[![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
-[![Dependencies](https://github.com/catherinevee/terraform-azure/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/catherinevee/terraform-azure/network/updates)
-[![Infrastructure Status](https://img.shields.io/github/deployments/catherinevee/terraform-azure/prod?label=Infrastructure)](https://github.com/catherinevee/terraform-azure/deployments)
-[![Last Commit](https://img.shields.io/github/last-commit/catherinevee/terraform-azure?label=Last%20Commit)](https://github.com/catherinevee/terraform-azure/commits/main)
+[![Terraform CI/CD](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
 
 ## Overview
 
@@ -159,15 +155,13 @@ These scripts automate the creation of Azure resources and GitHub secrets needed
 - **feature/** → Development environment (plan only)
 - **PRs** → Development environment (validation only)
 
-### Workflow Status
+### Workflow Details
 
-| Badge | Description | Trigger |
-|-------|-------------|---------|
-| **Terraform Deployment** | Unified workflow: validation and deployment | Push to main/develop, PRs, manual |
-| **Security Scan** | Comprehensive security analysis | Weekly schedule, PRs, and pushes |
-| **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
-| **Infrastructure Status** | Production environment deployment status | GitHub deployments |
-| **Last Commit** | Shows repository activity and freshness | On every commit |
+| Workflow | Description | Trigger |
+|----------|-------------|---------|
+| **Terraform** | Unified CI/CD: validation, security scanning, and deployment | Push to main/develop, PRs, manual dispatch |
+| **Security Scan** | Comprehensive security analysis (TFSec, Checkov, Secrets) | Weekly schedule, PRs, and pushes |
+| **Dependabot** | Automated dependency updates | Weekly (Mondays 4 AM) |
 
 ## Directory Structure
 
