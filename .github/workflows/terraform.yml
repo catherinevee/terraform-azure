@@ -161,7 +161,8 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -out=tfplan -input=false
+          terraform plan -out=tfplan -input=false \
+            -var-file=environments/${{ needs.setup.outputs.environment }}/terraform.tfvars
           terraform show -no-color tfplan > plan.txt
 
       - name: Upload Plan
@@ -169,7 +170,7 @@ jobs:
         if: success()
         with:
           name: terraform-plan-${{ needs.setup.outputs.environment }}
-          path: environments/${{ needs.setup.outputs.environment }}/plan.txt
+          path: plan.txt
           retention-days: 30
 
       - name: Comment PR
@@ -178,7 +179,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const plan = fs.readFileSync('environments/${{ needs.setup.outputs.environment }}/plan.txt', 'utf8');
+            const plan = fs.readFileSync('plan.txt', 'utf8');
             const output = `#### Terraform Plan 📖 \`${{ needs.setup.outputs.environment }}\`
             <details><summary>Show Plan</summary>
 
@@ -212,7 +213,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform-outputs-${{ needs.setup.outputs.environment }}
-          path: environments/${{ needs.setup.outputs.environment }}/outputs.json
+          path: outputs.json
           retention-days: 90
 
   summary:
