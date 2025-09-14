@@ -22,7 +22,8 @@
       "Bash(terraform:*)",
       "Bash(dot:*)",
       "Bash(tree:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

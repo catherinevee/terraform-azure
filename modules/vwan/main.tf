@@ -207,25 +207,17 @@ resource "azurerm_vpn_gateway_connection" "branches" {
     bgp_enabled = true
 
     ipsec_policy {
-      sa_lifetime_sec  = 3600
-      sa_data_size_kb  = 102400000
-      ipsec_encryption = "AES256"
-      ipsec_integrity  = "SHA256"
-      ike_encryption   = "AES256"
-      ike_integrity    = "SHA256"
-      dh_group         = "DHGroup14"
-      pfs_group        = "PFS14"
+      sa_lifetime_seconds    = 3600
+      sa_data_size_kilobytes = 102400000
+      encryption_algorithm   = "AES256"
+      integrity_algorithm    = "SHA256"
+      ike_encryption_algorithm = "AES256"
+      ike_integrity_algorithm  = "SHA256"
+      dh_group              = "DHGroup14"
+      pfs_group             = "PFS14"
     }
 
     shared_key = each.value.pre_shared_key
-  }
-
-  routing {
-    associated_route_table_id = azurerm_virtual_hub.primary.default_route_table_id
-
-    propagated_route_table {
-      route_table_ids = [azurerm_virtual_hub.primary.default_route_table_id]
-    }
   }
 }
 
@@ -248,11 +240,9 @@ resource "azurerm_express_route_circuit" "circuits" {
   location            = var.location
   tags                = var.tags
 
-  service_provider_properties {
-    service_provider_name = each.value.service_provider
-    peering_location      = each.value.peering_location
-    bandwidth_in_mbps     = each.value.bandwidth_mbps
-  }
+  service_provider_name = each.value.service_provider
+  peering_location      = each.value.peering_location
+  bandwidth_in_mbps     = each.value.bandwidth_mbps
 
   sku {
     tier   = each.value.sku_tier
@@ -281,14 +271,6 @@ resource "azurerm_express_route_connection" "circuits" {
   name                             = "ercon-${var.name_prefix}-${each.key}"
   express_route_gateway_id         = azurerm_express_route_gateway.primary[0].id
   express_route_circuit_peering_id = azurerm_express_route_circuit_peering.circuits[each.key].id
-
-  routing {
-    associated_route_table_id = azurerm_virtual_hub.primary.default_route_table_id
-
-    propagated_route_table {
-      route_table_ids = [azurerm_virtual_hub.primary.default_route_table_id]
-    }
-  }
 }
 
 # Hub Route Table (Custom Routes)
@@ -313,21 +295,4 @@ resource "azurerm_virtual_hub_route_table" "main" {
   }
 }
 
-# Hub-to-Hub connection (for multi-region)
-resource "azurerm_virtual_hub_connection" "hub_to_hub" {
-  count                 = var.secondary_location != null ? 1 : 0
-  name                  = "hub-connection-${var.name_prefix}"
-  virtual_hub_id        = azurerm_virtual_hub.primary.id
-  remote_virtual_hub_id = azurerm_virtual_hub.secondary[0].id
-
-  routing {
-    associated_route_table_id = azurerm_virtual_hub.primary.default_route_table_id
-
-    propagated_route_table {
-      route_table_ids = [
-        azurerm_virtual_hub.primary.default_route_table_id,
-        azurerm_virtual_hub.secondary[0].default_route_table_id
-      ]
-    }
-  }
-}
+# Hub-to-Hub connections are automatic within a vWAN

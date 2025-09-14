@@ -129,7 +129,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "app" {
       name                                         = "ipconfig"
       primary                                      = true
       subnet_id                                    = var.subnet_id
-      application_gateway_backend_address_pool_ids = [azurerm_application_gateway.main.backend_address_pool[0].id]
+      application_gateway_backend_address_pool_ids = [tolist(azurerm_application_gateway.main.backend_address_pool)[0].id]
     }
   }
 
