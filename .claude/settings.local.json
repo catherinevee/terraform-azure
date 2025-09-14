@@ -12,7 +12,8 @@
       "Bash(SUBSCRIPTION_ID=\"48421ac6-de0a-47d9-8a76-2166ceafcfe6\")",
       "Bash(SP_NAME=\"sp-terraform-cicd-catherinevee\")",
       "Bash(git push:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(powershell:*)"
     ],
     "deny": [],
     "ask": []

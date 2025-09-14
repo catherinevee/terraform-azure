@@ -1,19 +1,19 @@
 # Production-Ready Azure Terraform Deployment with vWAN
 
-[![CI/CD Pipeline](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-cicd.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-cicd.yml)
-[![Deploy Status](https://github.com/catherinevee/terraform-azure/workflows/.github/workflows/terraform-deploy.yml/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform-deploy.yml)
-[![Security Scan](https://img.shields.io/github/actions/workflow/status/catherinevee/terraform-azure/terraform-cicd.yml?label=Security%20Scan&event=schedule)](https://github.com/catherinevee/terraform-azure/security)
+[![Terraform Deployment](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
+[![Security Scan](https://img.shields.io/github/actions/workflow/status/catherinevee/terraform-azure/terraform.yml?label=Security%20Scan&event=schedule)](https://github.com/catherinevee/terraform-azure/security)
 [![Dependencies](https://github.com/catherinevee/terraform-azure/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/catherinevee/terraform-azure/network/updates)
+[![Infrastructure Status](https://img.shields.io/github/deployments/catherinevee/terraform-azure/prod?label=Infrastructure)](https://github.com/catherinevee/terraform-azure/deployments)
 [![Last Commit](https://img.shields.io/github/last-commit/catherinevee/terraform-azure?label=Last%20Commit)](https://github.com/catherinevee/terraform-azure/commits/main)
 
 ## Deployment Status
 
 | Badge | Description | Trigger |
 |-------|-------------|---------|
-| **CI/CD Pipeline** | Full validation, security scanning, and deployment pipeline | Push to main/develop, PRs |
-| **Deploy Status** | Terraform deployment workflow for all environments | Manual or push triggers |
-| **Security Scan** | TFSec, Checkov, and Trivy security analysis | Weekly schedule & PRs |
+| **Terraform Deployment** | Unified workflow: validation, security scanning, and deployment | Push to main/develop, PRs, manual |
+| **Security Scan** | TFSec and Checkov security analysis | Weekly schedule & PRs |
 | **Dependencies** | Automated dependency updates via Dependabot | Weekly (Mondays 4 AM) |
+| **Infrastructure Status** | Production environment deployment status | GitHub deployments |
 | **Last Commit** | Shows repository activity and freshness | On every commit |
 
 ## Overview
