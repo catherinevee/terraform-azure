@@ -21,7 +21,8 @@
       "Bash(scoop search:*)",
       "Bash(terraform:*)",
       "Bash(dot:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
