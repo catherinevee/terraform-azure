@@ -47,6 +47,8 @@ The repository includes comprehensive GitHub Actions workflows:
 
 This Terraform configuration deploys a scalable, secure web application infrastructure on Azure with advanced networking capabilities using Azure Virtual WAN (vWAN). The infrastructure is designed for enterprise-grade deployments with high availability, security, and global connectivity.
 
+**Deployment Target**: Infrastructure is deployed to Azure East US 2 (primary) and West US 2 (secondary for production), using Azure subscription ID `48421ac6-de0a-47d9-8a76-2166ceafcfe6`.
+
 ## Architecture Diagrams
 
 ### High-Level Architecture
