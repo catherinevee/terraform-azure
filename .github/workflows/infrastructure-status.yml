@@ -102,3 +102,5 @@ jobs:
         if: steps.check.outputs.status == 'destroyed'
         run: |
           echo "Infrastructure is destroyed - no resources deployed"
+          echo "::warning::Infrastructure is currently destroyed. Deploy resources to restore service."
+          exit 1
