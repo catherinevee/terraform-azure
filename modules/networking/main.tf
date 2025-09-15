@@ -11,7 +11,7 @@ resource "azurerm_virtual_network" "main" {
 resource "time_sleep" "wait_for_hub" {
   count = var.enable_vwan_connection ? 1 : 0
 
-  create_duration = "60s"
+  create_duration = "120s"  # Increased to 2 minutes for hub readiness
 
   triggers = {
     hub_id = var.vwan_hub_id

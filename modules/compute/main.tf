@@ -17,8 +17,8 @@ resource "azurerm_application_gateway" "main" {
   tags                = var.tags
 
   sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
+    name     = "WAF_v2"
+    tier     = "WAF_v2"
     capacity = 2
   }
 

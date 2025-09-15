@@ -264,13 +264,25 @@ resource "azurerm_express_route_circuit_peering" "circuits" {
 #   express_route_circuit_peering_id = azurerm_express_route_circuit_peering.circuits[each.key].id
 # }
 
+# Add delay for firewall to be fully ready
+resource "time_sleep" "wait_for_firewall" {
+  count = var.enable_firewall ? 1 : 0
+
+  create_duration = "120s"
+
+  depends_on = [azurerm_firewall.primary]
+}
+
 # Hub Route Table (Custom Routes)
 resource "azurerm_virtual_hub_route_table" "main" {
   count          = var.enable_firewall ? 1 : 0
   name           = "RT-${var.name_prefix}"
   virtual_hub_id = azurerm_virtual_hub.primary.id
 
-  depends_on = [azurerm_firewall.primary]
+  depends_on = [
+    azurerm_firewall.primary,
+    time_sleep.wait_for_firewall
+  ]
 
   route {
     name              = "default-to-firewall"
