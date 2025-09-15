@@ -17,13 +17,9 @@ resource "azurerm_application_gateway" "main" {
   tags                = var.tags
 
   sku {
-    name = "Standard_v2"
-    tier = "Standard_v2"
-  }
-
-  autoscale_configuration {
-    min_capacity = 2
-    max_capacity = 4
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
+    capacity = 2
   }
 
   gateway_ip_configuration {
