@@ -17,9 +17,9 @@ resource "azurerm_application_gateway" "main" {
   tags                = var.tags
 
   sku {
-    name     = "WAF_v2"
-    tier     = "WAF_v2"
-    capacity = 2
+    name = "WAF_v2"
+    tier = "WAF_v2"
+    # capacity = 2  # Commented out - using autoscale_configuration instead
   }
 
   gateway_ip_configuration {
@@ -158,6 +158,12 @@ resource "azurerm_key_vault_secret" "ssh_private_key" {
   name         = "vmss-ssh-private-key"
   value        = tls_private_key.ssh.private_key_pem
   key_vault_id = var.key_vault_id
+
+  # Note: Ensure Service Principal has secrets permissions on Key Vault
+  # This might fail if the access policy hasn't propagated
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
 
 # Autoscale settings

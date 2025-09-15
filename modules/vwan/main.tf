@@ -268,7 +268,7 @@ resource "azurerm_express_route_circuit_peering" "circuits" {
 resource "time_sleep" "wait_for_firewall" {
   count = var.enable_firewall ? 1 : 0
 
-  create_duration = "120s"
+  create_duration = "300s"
 
   depends_on = [azurerm_firewall.primary]
 }
