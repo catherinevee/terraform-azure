@@ -2,12 +2,12 @@
 
 **Deployment Regions: East US 2 (Primary) | West US 2 (DR)**
 
-[![Deployed?](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
+[![Terraform Pipeline](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
 [![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
 [![Infrastructure Status](https://github.com/catherinevee/terraform-azure/workflows/Infrastructure%20Status/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/infrastructure-status.yml)
 
 **Badge Descriptions:**
-- **Deployed?** - Terraform CI/CD pipeline status. Shows whether the latest Terraform plan, validate, and format checks are passing. Green indicates the pipeline can successfully deploy infrastructure.
+- **Terraform Pipeline** - Terraform CI/CD pipeline status. Shows whether the latest Terraform plan, validate, and format checks are passing. Green indicates the pipeline can successfully deploy infrastructure.
 - **Security Scan** - Security and compliance validation status. Runs TFSec, Checkov, and format validation. Green indicates all security policies and best practices are being followed.
 - **Infrastructure Status** - Real-time Azure infrastructure deployment state. Checks actual Azure resources every 30 minutes. Green indicates infrastructure is currently deployed in Azure, red indicates no resources are deployed.
 
