@@ -23,7 +23,18 @@
       "Bash(dot:*)",
       "Bash(tree:*)",
       "Bash(curl:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(for i in {1..10})",
+      "Bash(do gh run view 17717682580 --json status,conclusion --jq '. | \"\"[\\(now | strftime(\\\"\"%H:%M:%S\\\"\"))] Status: \\(.status) | Conclusion: \\(.conclusion)\"\"')",
+      "Bash(echo \"Status check $i\")",
+      "Bash(done)",
+      "Bash(while read line)",
+      "Bash(do if echo \"$line\")",
+      "Bash(else echo \"Status changed: $line\")",
+      "Bash(fi)",
+      "Bash(for i in {1..30})",
+      "Bash(then echo \"Deployment finished!\")",
+      "Bash(break)"
     ],
     "deny": [],
     "ask": []

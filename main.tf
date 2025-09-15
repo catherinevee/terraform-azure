@@ -109,12 +109,13 @@ module "database" {
   name_prefix         = local.name_prefix
   tags                = local.common_tags
 
-  subnet_id             = module.networking.subnet_ids["database"]
-  vnet_id               = module.networking.vnet_id
-  key_vault_id          = module.security.key_vault_id
-  database_sku          = var.database_sku
-  backup_retention_days = var.environment == "prod" ? 35 : 7
-  geo_redundant_backup  = var.environment == "prod" ? true : false
+  subnet_id                = module.networking.subnet_ids["database"]
+  vnet_id                  = module.networking.vnet_id
+  key_vault_id             = module.security.key_vault_id
+  database_sku             = var.database_sku
+  backup_retention_days    = var.environment == "prod" ? 35 : 7
+  geo_redundant_backup     = var.environment == "prod" ? true : false
+  enable_high_availability = var.environment == "prod" ? true : false
 }
 
 # Compute Module

@@ -50,3 +50,9 @@ variable "geo_redundant_backup" {
   type        = bool
   default     = false
 }
+
+variable "enable_high_availability" {
+  description = "Enable high availability for PostgreSQL"
+  type        = bool
+  default     = false
+}

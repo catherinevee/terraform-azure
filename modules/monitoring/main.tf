@@ -93,30 +93,31 @@ resource "azurerm_monitor_metric_alert" "app_gateway_unhealthy" {
   }
 }
 
-# vWAN Hub Health Alert
-resource "azurerm_monitor_metric_alert" "vwan_hub_health" {
-  count               = length(var.vwan_hub_ids)
-  name                = "alert-${var.name_prefix}-vwan-hub-${count.index}"
-  resource_group_name = var.resource_group_name
-  scopes              = [var.vwan_hub_ids[count.index]]
-  description         = "Alert for vWAN hub health issues"
-  severity            = 1
-  frequency           = "PT5M"
-  window_size         = "PT15M"
-  tags                = var.tags
-
-  criteria {
-    metric_namespace = "Microsoft.Network/virtualHubs"
-    metric_name      = "VirtualHubHealthStatus"
-    aggregation      = "Average"
-    operator         = "LessThan"
-    threshold        = 1
-  }
-
-  action {
-    action_group_id = azurerm_monitor_action_group.main.id
-  }
-}
+# Commented out - vWAN Hub doesn't support VirtualHubHealthStatus metric
+# # vWAN Hub Health Alert
+# resource "azurerm_monitor_metric_alert" "vwan_hub_health" {
+#   count               = length(var.vwan_hub_ids)
+#   name                = "alert-${var.name_prefix}-vwan-hub-${count.index}"
+#   resource_group_name = var.resource_group_name
+#   scopes              = [var.vwan_hub_ids[count.index]]
+#   description         = "Alert for vWAN hub health issues"
+#   severity            = 1
+#   frequency           = "PT5M"
+#   window_size         = "PT15M"
+#   tags                = var.tags
+#
+#   criteria {
+#     metric_namespace = "Microsoft.Network/virtualHubs"
+#     metric_name      = "VirtualHubHealthStatus"
+#     aggregation      = "Average"
+#     operator         = "LessThan"
+#     threshold        = 1
+#   }
+#
+#   action {
+#     action_group_id = azurerm_monitor_action_group.main.id
+#   }
+# }
 
 # VPN Gateway Connection Alert
 resource "azurerm_monitor_metric_alert" "vpn_connection" {
@@ -166,37 +167,39 @@ resource "azurerm_monitor_diagnostic_setting" "app_gateway" {
   }
 }
 
-# Diagnostic Settings for vWAN
-resource "azurerm_monitor_diagnostic_setting" "vwan" {
-  name                       = "diag-${var.name_prefix}-vwan"
-  target_resource_id         = var.vwan_id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
+# Commented out - vWAN doesn't support diagnostic settings
+# # Diagnostic Settings for vWAN
+# resource "azurerm_monitor_diagnostic_setting" "vwan" {
+#   name                       = "diag-${var.name_prefix}-vwan"
+#   target_resource_id         = var.vwan_id
+#   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
+#
+#   enabled_log {
+#     category = "RouteTables"
+#   }
+#
+#   metric {
+#     category = "AllMetrics"
+#   }
+# }
 
-  enabled_log {
-    category = "RouteTables"
-  }
-
-  metric {
-    category = "AllMetrics"
-  }
-}
-
-# Diagnostic Settings for vWAN Hubs
-resource "azurerm_monitor_diagnostic_setting" "vwan_hubs" {
-  count                      = length(var.vwan_hub_ids)
-  name                       = "diag-${var.name_prefix}-hub-${count.index}"
-  target_resource_id         = var.vwan_hub_ids[count.index]
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
-
-  enabled_log {
-    category = "RouteTables"
-  }
-
-  enabled_log {
-    category = "BGPLogs"
-  }
-
-  metric {
-    category = "AllMetrics"
-  }
-}
+# Commented out - vWAN Hubs don't support diagnostic settings
+# # Diagnostic Settings for vWAN Hubs
+# resource "azurerm_monitor_diagnostic_setting" "vwan_hubs" {
+#   count                      = length(var.vwan_hub_ids)
+#   name                       = "diag-${var.name_prefix}-hub-${count.index}"
+#   target_resource_id         = var.vwan_hub_ids[count.index]
+#   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
+#
+#   enabled_log {
+#     category = "RouteTables"
+#   }
+#
+#   enabled_log {
+#     category = "BGPLogs"
+#   }
+#
+#   metric {
+#     category = "AllMetrics"
+#   }
+# }

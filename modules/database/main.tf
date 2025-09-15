@@ -18,9 +18,12 @@ resource "azurerm_postgresql_flexible_server" "main" {
   geo_redundant_backup_enabled = var.geo_redundant_backup
   tags                         = var.tags
 
-  high_availability {
-    mode                      = "ZoneRedundant"
-    standby_availability_zone = "2"
+  dynamic "high_availability" {
+    for_each = var.enable_high_availability ? [1] : []
+    content {
+      mode                      = "ZoneRedundant"
+      standby_availability_zone = "2"
+    }
   }
 }
 
