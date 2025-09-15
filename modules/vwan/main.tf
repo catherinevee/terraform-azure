@@ -66,6 +66,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "vwan" {
   firewall_policy_id = azurerm_firewall_policy.vwan[0].id
   priority           = 100
 
+  depends_on = [azurerm_firewall.primary]
+
   application_rule_collection {
     name     = "AllowWebTraffic"
     priority = 100
@@ -100,21 +102,22 @@ resource "azurerm_firewall_policy_rule_collection_group" "vwan" {
     }
   }
 
-  nat_rule_collection {
-    name     = "DNATRules"
-    priority = 300
-    action   = "Dnat"
+  # NAT rules commented out - requires firewall to be fully provisioned first
+  # nat_rule_collection {
+  #   name     = "DNATRules"
+  #   priority = 300
+  #   action   = "Dnat"
 
-    rule {
-      name                = "RDPToManagement"
-      protocols           = ["TCP"]
-      source_addresses    = var.allowed_ip_ranges
-      destination_address = azurerm_firewall.primary[0].virtual_hub[0].public_ip_addresses[0]
-      destination_ports   = ["3389"]
-      translated_address  = "10.0.4.4"
-      translated_port     = "3389"
-    }
-  }
+  #   rule {
+  #     name                = "RDPToManagement"
+  #     protocols           = ["TCP"]
+  #     source_addresses    = var.allowed_ip_ranges
+  #     destination_address = azurerm_firewall.primary[0].virtual_hub[0].public_ip_addresses[0]
+  #     destination_ports   = ["3389"]
+  #     translated_address  = "10.0.4.4"
+  #     translated_port     = "3389"
+  #   }
+  # }
 }
 
 # Azure Firewall in Primary Hub
@@ -253,19 +256,21 @@ resource "azurerm_express_route_circuit_peering" "circuits" {
   shared_key                    = "SharedSecret123!"
 }
 
-# ExpressRoute Connections
-resource "azurerm_express_route_connection" "circuits" {
-  for_each                         = var.express_route_circuits
-  name                             = "ercon-${var.name_prefix}-${each.key}"
-  express_route_gateway_id         = azurerm_express_route_gateway.primary[0].id
-  express_route_circuit_peering_id = azurerm_express_route_circuit_peering.circuits[each.key].id
-}
+# ExpressRoute Connections - Commented out as circuit needs provider provisioning
+# resource "azurerm_express_route_connection" "circuits" {
+#   for_each                         = var.express_route_circuits
+#   name                             = "ercon-${var.name_prefix}-${each.key}"
+#   express_route_gateway_id         = azurerm_express_route_gateway.primary[0].id
+#   express_route_circuit_peering_id = azurerm_express_route_circuit_peering.circuits[each.key].id
+# }
 
 # Hub Route Table (Custom Routes)
 resource "azurerm_virtual_hub_route_table" "main" {
   count          = var.enable_firewall ? 1 : 0
   name           = "RT-${var.name_prefix}"
   virtual_hub_id = azurerm_virtual_hub.primary.id
+
+  depends_on = [azurerm_firewall.primary]
 
   route {
     name              = "default-to-firewall"
