@@ -115,7 +115,7 @@ module "database" {
   database_sku             = var.database_sku
   backup_retention_days    = var.environment == "prod" ? 35 : 7
   geo_redundant_backup     = var.environment == "prod" ? true : false
-  enable_high_availability = false  # Disabled due to SKU/region limitations
+  enable_high_availability = false # Disabled due to SKU/region limitations
 }
 
 # Compute Module

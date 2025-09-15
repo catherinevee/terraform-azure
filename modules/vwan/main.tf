@@ -208,7 +208,7 @@ resource "azurerm_vpn_gateway_connection" "branches" {
     vpn_site_link_id = azurerm_vpn_site.branches[each.key].link[0].id
 
     bgp_enabled = true
-    shared_key = each.value.pre_shared_key
+    shared_key  = each.value.pre_shared_key
   }
 }
 
