@@ -40,7 +40,12 @@
       "Bash(for i in {1..5})",
       "Bash(do)",
       "Bash(for i in {1..3})",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(grep:*)",
+      "Bash(for branch in \"dependabot/github_actions/actions/github-script-8\" \"dependabot/github_actions/actions/setup-python-6\" \"dependabot/github_actions/terraform-linters/setup-tflint-5\" \"dependabot/terraform/hashicorp/time-tw-0.13.1\")",
+      "Bash(do echo \"Deleting branch: $branch\")",
+      "Bash(awk:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []
