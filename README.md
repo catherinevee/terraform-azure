@@ -4,8 +4,12 @@
 
 [![Deployed?](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
 [![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
+[![Infrastructure Status](https://github.com/catherinevee/terraform-azure/workflows/Infrastructure%20Status/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/infrastructure-status.yml)
 
-*Green "Deployed?" badge = CI/CD pipeline successfully validates, builds, and can deploy/destroy infrastructure*
+*Badge Descriptions:*
+- *Deployed? - CI/CD pipeline health (green = pipeline working)*
+- *Security Scan - Security checks status (green = all checks passing)*
+- *Infrastructure Status - Live infrastructure state (green = resources deployed, red = destroyed)*
 
 ## Overview
 
@@ -171,6 +175,7 @@ These scripts automate the creation of Azure resources and GitHub secrets needed
 |----------|-------------|---------|
 | **Terraform** | Unified CI/CD: validation, security scanning, and deployment | Push to main/develop, PRs, manual dispatch |
 | **Security Scan** | Comprehensive security analysis (TFSec, Checkov, Secrets) | Weekly schedule, PRs, and pushes |
+| **Infrastructure Status** | Monitors actual Azure resources deployment state | Every 30 minutes, pushes to main, manual dispatch |
 | **Dependabot** | Automated dependency updates | Weekly (Mondays 4 AM) |
 
 ## Directory Structure

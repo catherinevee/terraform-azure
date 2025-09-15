@@ -1,0 +1,104 @@
+name: Infrastructure Status
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'  # Run every 30 minutes
+  push:
+    branches:
+      - main
+
+jobs:
+  check-infrastructure:
+    name: Check Infrastructure Status
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.ARM_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.ARM_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.ARM_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.ARM_TENANT_ID }}"
+            }
+
+      - name: Check Resource Groups
+        id: check
+        run: |
+          # Check for production resource groups
+          PROD_RG_PRIMARY=$(az group exists -n rg-webapp-prod-eus2 2>/dev/null || echo "false")
+          PROD_RG_SECONDARY=$(az group exists -n rg-webapp-prod-wus2 2>/dev/null || echo "false")
+
+          # Check for staging resource group
+          STAGING_RG=$(az group exists -n rg-webapp-staging-eus2 2>/dev/null || echo "false")
+
+          # Check for dev resource group
+          DEV_RG=$(az group exists -n rg-webapp-dev-eus2 2>/dev/null || echo "false")
+
+          # Determine overall status
+          if [[ "$PROD_RG_PRIMARY" == "true" ]] || [[ "$PROD_RG_SECONDARY" == "true" ]]; then
+            echo "status=deployed" >> $GITHUB_OUTPUT
+            echo "environment=production" >> $GITHUB_OUTPUT
+
+            # Count resources in production
+            if [[ "$PROD_RG_PRIMARY" == "true" ]]; then
+              RESOURCE_COUNT=$(az resource list --resource-group rg-webapp-prod-eus2 --query "length(@)" -o tsv 2>/dev/null || echo "0")
+              echo "resource_count=$RESOURCE_COUNT" >> $GITHUB_OUTPUT
+            else
+              echo "resource_count=0" >> $GITHUB_OUTPUT
+            fi
+          elif [[ "$STAGING_RG" == "true" ]]; then
+            echo "status=deployed" >> $GITHUB_OUTPUT
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            RESOURCE_COUNT=$(az resource list --resource-group rg-webapp-staging-eus2 --query "length(@)" -o tsv 2>/dev/null || echo "0")
+            echo "resource_count=$RESOURCE_COUNT" >> $GITHUB_OUTPUT
+          elif [[ "$DEV_RG" == "true" ]]; then
+            echo "status=deployed" >> $GITHUB_OUTPUT
+            echo "environment=development" >> $GITHUB_OUTPUT
+            RESOURCE_COUNT=$(az resource list --resource-group rg-webapp-dev-eus2 --query "length(@)" -o tsv 2>/dev/null || echo "0")
+            echo "resource_count=$RESOURCE_COUNT" >> $GITHUB_OUTPUT
+          else
+            echo "status=destroyed" >> $GITHUB_OUTPUT
+            echo "environment=none" >> $GITHUB_OUTPUT
+            echo "resource_count=0" >> $GITHUB_OUTPUT
+          fi
+
+          # Output summary
+          echo "### Infrastructure Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment | Status | Resources |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------------|--------|-----------|" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$PROD_RG_PRIMARY" == "true" ]] || [[ "$PROD_RG_SECONDARY" == "true" ]]; then
+            echo "| Production | ✅ Deployed | $(az resource list --resource-group rg-webapp-prod-eus2 --query "length(@)" -o tsv 2>/dev/null || echo "0") resources |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Production | ❌ Destroyed | 0 resources |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ "$STAGING_RG" == "true" ]]; then
+            echo "| Staging | ✅ Deployed | $(az resource list --resource-group rg-webapp-staging-eus2 --query "length(@)" -o tsv 2>/dev/null || echo "0") resources |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Staging | ❌ Destroyed | 0 resources |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ "$DEV_RG" == "true" ]]; then
+            echo "| Development | ✅ Deployed | $(az resource list --resource-group rg-webapp-dev-eus2 --query "length(@)" -o tsv 2>/dev/null || echo "0") resources |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Development | ❌ Destroyed | 0 resources |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Update Status Badge
+        if: steps.check.outputs.status == 'deployed'
+        run: |
+          echo "Infrastructure is deployed in ${{ steps.check.outputs.environment }} with ${{ steps.check.outputs.resource_count }} resources"
+
+      - name: Update Status Badge - Destroyed
+        if: steps.check.outputs.status == 'destroyed'
+        run: |
+          echo "Infrastructure is destroyed - no resources deployed"
