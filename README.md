@@ -1,15 +1,22 @@
 # Production-Ready Azure Terraform Deployment with vWAN
 
-**🌎 Deployment Regions: East US 2 (Primary) | West US 2 (DR)**
+**Deployment Regions: East US 2 (Primary) | West US 2 (DR)**
 
 [![Deployed?](https://github.com/catherinevee/terraform-azure/workflows/Terraform/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/terraform.yml)
 [![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
 
-*✅ Green "Deployed?" badge = CI/CD pipeline successfully validates, builds, and can tear down infrastructure*
+*Green "Deployed?" badge = CI/CD pipeline successfully validates, builds, and can deploy/destroy infrastructure*
 
 ## Overview
 
 Enterprise-grade Azure infrastructure deployment using Terraform with Virtual WAN (vWAN) for global connectivity. This solution provides a scalable, secure web application platform with automated CI/CD pipelines, comprehensive security scanning, and multi-environment support.
+
+### Current Status
+- **Infrastructure**: Successfully deployed and tested in production environment
+- **CI/CD Pipeline**: Fully operational with automated validation, deployment, and destruction capabilities
+- **Security Scanning**: All security checks passing with automated TFSec, Checkov, and format validation
+- **Terraform State**: Managed in Azure Storage with proper backend configuration
+- **Resource Management**: Automated resource lifecycle management with proper dependency handling
 
 ### Key Features
 - **Global Connectivity**: Azure Virtual WAN with hub-spoke topology
@@ -414,6 +421,13 @@ az monitor activity-log list \
    - Check private endpoint
    - Validate connection string
    - Review network connectivity
+
+4. **Long Deployment/Destruction Times**
+   - vWAN resources can take 1-3 hours to fully deploy or destroy
+   - Virtual Hub creation/deletion is particularly time-consuming
+   - Azure Firewall in vWAN takes significant time to provision
+   - This is normal Azure behavior for complex networking resources
+   - Use manual resource group deletion if Terraform destroy times out
 
 ### Debug Commands
 ```bash
