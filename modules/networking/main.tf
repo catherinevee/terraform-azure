@@ -7,6 +7,17 @@ resource "azurerm_virtual_network" "main" {
   tags                = var.tags
 }
 
+# Add a delay for hub to be ready
+resource "time_sleep" "wait_for_hub" {
+  count = var.enable_vwan_connection ? 1 : 0
+
+  create_duration = "60s"
+
+  triggers = {
+    hub_id = var.vwan_hub_id
+  }
+}
+
 # vWAN Hub Connection
 resource "azurerm_virtual_hub_connection" "main" {
   count                     = var.enable_vwan_connection ? 1 : 0
@@ -27,6 +38,11 @@ resource "azurerm_virtual_hub_connection" "main" {
       next_hop_ip_address = cidrhost(var.vnet_address_space[0], 1)
     }
   }
+
+  depends_on = [
+    azurerm_subnet.subnets,
+    time_sleep.wait_for_hub
+  ]
 }
 
 # Subnets

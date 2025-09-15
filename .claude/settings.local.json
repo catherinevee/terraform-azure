@@ -34,7 +34,9 @@
       "Bash(fi)",
       "Bash(for i in {1..30})",
       "Bash(then echo \"Deployment finished!\")",
-      "Bash(break)"
+      "Bash(break)",
+      "Bash(for i in {1..20})",
+      "Bash(then break)"
     ],
     "deny": [],
     "ask": []
