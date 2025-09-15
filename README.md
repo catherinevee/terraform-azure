@@ -6,10 +6,10 @@
 [![Security Scan](https://github.com/catherinevee/terraform-azure/workflows/Security%20Scan/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/security.yml)
 [![Infrastructure Status](https://github.com/catherinevee/terraform-azure/workflows/Infrastructure%20Status/badge.svg)](https://github.com/catherinevee/terraform-azure/actions/workflows/infrastructure-status.yml)
 
-*Badge Descriptions:*
-- *Deployed? - CI/CD pipeline health (green = pipeline working)*
-- *Security Scan - Security checks status (green = all checks passing)*
-- *Infrastructure Status - Live infrastructure state (green = resources deployed, red = destroyed)*
+**Badge Descriptions:**
+- **Deployed?** - Terraform CI/CD pipeline status. Shows whether the latest Terraform plan, validate, and format checks are passing. Green indicates the pipeline can successfully deploy infrastructure.
+- **Security Scan** - Security and compliance validation status. Runs TFSec, Checkov, and format validation. Green indicates all security policies and best practices are being followed.
+- **Infrastructure Status** - Real-time Azure infrastructure deployment state. Checks actual Azure resources every 30 minutes. Green indicates infrastructure is currently deployed in Azure, red indicates no resources are deployed.
 
 ## Overview
 
