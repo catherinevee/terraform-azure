@@ -51,7 +51,7 @@ jobs:
           additional_args: --out tfsec-results.sarif
 
       - name: Upload TFSec Results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
           sarif_file: tfsec-results.sarif
@@ -78,7 +78,7 @@ jobs:
           skip_check: CKV_AZURE_35,CKV_AZURE_36,CKV_AZURE_160,CKV_AZURE_41,CKV_AZURE_114,CKV_AZURE_136,CKV_AZURE_49,CKV_AZURE_97,CKV_AZURE_217,CKV_AZURE_218
 
       - name: Upload Checkov Results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
           sarif_file: checkov-results.sarif
