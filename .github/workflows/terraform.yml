@@ -163,7 +163,7 @@ jobs:
           terraform show -no-color tfplan > plan.txt
 
       - name: Upload Plan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           name: terraform-plan-${{ needs.setup.outputs.environment }}
@@ -207,7 +207,7 @@ jobs:
 
       - name: Upload Outputs
         if: needs.setup.outputs.should-deploy == 'true' && needs.setup.outputs.action == 'apply'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: terraform-outputs-${{ needs.setup.outputs.environment }}
           path: outputs.json
